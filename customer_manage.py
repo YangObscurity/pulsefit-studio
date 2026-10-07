@@ -9,8 +9,8 @@ def customer_load(customer_path:str)->list:
         try:
             with open(customer_path,"r") as readed_file:
                 for i in readed_file:
+                    i=i.strip()
                     if i:
-                        i=i.strip()
                         customer_list.append(i.split(","))
                         #print(customer_list)
             return customer_list
