@@ -47,9 +47,7 @@ def customer_update():
         try:
             existing_customer=customer_load(customer_init)
             select=input("what info you're trying to update?(ID, NAME, PHONE, EMAIL)"+"\n")
-            if select not in ["ID","NAME","PHONE","EMAIL"]:
-                print("Wrong input, please try again")
-                continue
+            #if select not in ["ID","NAME","PHONE","EMAIL"]:
             if select == "ID":
                 Find_CID=input("Input the ID you want to find"+"\n")
                 if not information_check(Find_CID,existing_customer):
@@ -59,7 +57,7 @@ def customer_update():
                     print("Something wrong with the ID, please try again")
                     continue
                 information_update(Find_CID,CID_INIT+CID,existing_customer)
-            if select == "NAME":
+            elif select == "NAME":
                 Find_NAME=input("Input the name you want to find"+"\n")
                 if not information_check(Find_NAME,existing_customer):
                     continue
@@ -68,7 +66,7 @@ def customer_update():
                     print("Something wrong with the name, please try again")
                     continue
                 information_update(Find_NAME,NAME,existing_customer)
-            if select == "PHONE":
+            elif select == "PHONE":
                 Find_PHONE=input("Input the phone number you want to find"+"\n")
                 if not information_check(Find_PHONE,existing_customer):
                     continue
@@ -77,12 +75,15 @@ def customer_update():
                     print("Something wrong with the phone number, please try again")
                     continue
                 information_update(Find_PHONE,PHONE,existing_customer)
-            if select == "EMAIL":
+            elif select == "EMAIL":
                 Find_EMAIL=input("Input the email you want to find"+"\n")
                 if not information_check(Find_EMAIL,existing_customer):
                     continue
                 EMAIL=email_workflow()
                 information_update(Find_EMAIL,EMAIL,existing_customer)
+            else:
+                print("Wrong input, please try again")
+                continue
             rewrite_file(existing_customer,customer_init)
             result=input("Still update new customer?(y\\n)"+"\n").strip()
             if result == "N" or result == "n":
@@ -111,7 +112,7 @@ def CID_workflow():
             else:
                 continue
         except Exception as e:
-            return repr(e)
+            print(repr(e))
 
 def CID_Check(CID,Full_CID,existing_customer)->bool:
     if not len(CID) == 8:
@@ -133,7 +134,7 @@ def NAME_workflow():
             else:
                 continue
         except Exception as e:
-            return repr(e)
+            print(repr(e))
 
 def NAME_Check(name)->bool:
     if not name.isalpha():
@@ -150,7 +151,7 @@ def PhoneNumber_workflow():
             else:
                 continue
         except Exception as e:
-            return repr(e)
+            print(repr(e))
 
 def PhoneNumber_Check(phone_number)->bool:
     if not len(phone_number) == 10:
@@ -169,7 +170,7 @@ def email_workflow():
             email_merge = email_prefix.strip()+"@"+email_provider.strip()+".com"
             return email_merge
         except Exception as e:
-            return repr(e)
+            print(repr(e))
 
 def check_exist(list,input_data,duplicated_name:str)->bool:
     for one_d in list:
@@ -189,6 +190,26 @@ def rewrite_file(customer_data:list,customer_path:str):
             print(list)
             readed_file.write(",".join(list)+"\n")
 
+def customer_menu():
+    while(True):
+        print("===== CUSTOMER MANAGEMENT =====")
+        print("1. Add Customer")
+        print("2. Update Customer")
+        print("3. Back to Main Menu")
+
+        choice = input("Select your option: ")
+
+        if choice == "1":
+            customer_add()
+        elif choice == "2":
+            customer_update()
+        elif choice == "3":
+            break
+        else:
+            print("\nInvalid option, please try again.\n")
+
+
+#debug↓
 if __name__ == "__main__":
     #testlist = customer_load(customer_init)
     #rewrite_file(testlist,customer_init)

@@ -559,34 +559,6 @@ def cancel_booking():
    print(f"\nBooking {booking_id} cancelled.\n")
 
 
-def main_menu():
-   while True:
-      print("===== PULSEFIT STUDIO =====")
-      print("1. Admin")
-      print("2. Booking Officer")
-      print("3. Customer Management")
-      print("4. Accountant")
-      print("5. Exit")
-
-      choice = input("Select your role: ")
-
-      if choice == "1":
-         admin_menu()
-      elif choice == "2":
-         booking_menu()
-      elif choice == "3":
-         pass   # whoever owns Customer Management's menu function goes here
-      elif choice == "4":
-         pass   # whoever owns Accountant's menu function goes here
-      elif choice == "5":
-         print("Goodbye!")
-         break
-      else:
-         print("\nInvalid option, please try again.\n")
-
-
-if __name__ == "__main__":
-   main_menu()
 
 if __name__ == "__main__":
    booking_menu()      
