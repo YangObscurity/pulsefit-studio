@@ -9,9 +9,10 @@ def customer_load(customer_path:str)->list:
         try:
             with open(customer_path,"r") as readed_file:
                 for i in readed_file:
-                    i=i.strip()
-                    customer_list.append(i.split(","))
-                    #print(customer_list)
+                    if i:
+                        i=i.strip()
+                        customer_list.append(i.split(","))
+                        #print(customer_list)
             return customer_list
         except FileNotFoundError as e:
             with open(customer_path,"w") as created_file:
@@ -50,39 +51,51 @@ def customer_update():
             #if select not in ["ID","NAME","PHONE","EMAIL"]:
             if select == "ID":
                 Find_CID=input("Input the ID you want to find"+"\n")
-                if not information_check(Find_CID,existing_customer):
+                if not check_exist(existing_customer, Find_CID, "ID"):
+                    print("Customer ID not found. Please try again.")
                     continue
+                print("Customer found. Proceeding to update ID...")
                 CID=input("Input the ID you want to update(8 len only)"+"\n")
                 if not CID_Check(CID,CID_INIT+CID,existing_customer):
-                    print("Something wrong with the ID, please try again")
+                    print("Something wrong with the ID, please try again.")
                     continue
                 information_update(Find_CID,CID_INIT+CID,existing_customer)
+                print("ID updated successfully.")
             elif select == "NAME":
                 Find_NAME=input("Input the name you want to find"+"\n")
-                if not information_check(Find_NAME,existing_customer):
+                if not check_exist(existing_customer, Find_NAME, "NAME"):
+                    print("Customer NAME not found. Please try again.")
                     continue
+                print("Customer found. Proceeding to update NAME...")
                 NAME=input("Input the name you want to update"+"\n")
                 if not NAME_Check(NAME):
-                    print("Something wrong with the name, please try again")
+                    print("Something wrong with the name, please try again.")
                     continue
                 information_update(Find_NAME,NAME,existing_customer)
+                print("NAME updated successfully.")
             elif select == "PHONE":
                 Find_PHONE=input("Input the phone number you want to find"+"\n")
-                if not information_check(Find_PHONE,existing_customer):
+                if not check_exist(existing_customer, Find_PHONE, "PHONE"):
+                    print("Customer PHONE not found. Please try again.")
                     continue
+                print("Customer found. Proceeding to update PHONE...")
                 PHONE=input("Input the phone number you want to update(10 lens number)"+"\n")
                 if not PhoneNumber_Check(PHONE):
-                    print("Something wrong with the phone number, please try again")
+                    print("Something wrong with the phone number, please try again.")
                     continue
                 information_update(Find_PHONE,PHONE,existing_customer)
+                print("PHONE updated successfully.")
             elif select == "EMAIL":
                 Find_EMAIL=input("Input the email you want to find"+"\n")
-                if not information_check(Find_EMAIL,existing_customer):
+                if not check_exist(existing_customer, Find_EMAIL, "EMAIL"):
+                    print("Customer EMAIL not found. Please try again.")
                     continue
+                print("Customer found. Proceeding to update EMAIL...")
                 EMAIL=email_workflow()
                 information_update(Find_EMAIL,EMAIL,existing_customer)
+                print("EMAIL updated successfully.")
             else:
-                print("Wrong input, please try again")
+                print("Wrong input, please try again.")
                 continue
             rewrite_file(existing_customer,customer_init)
             result=input("Still update new customer?(y\\n)"+"\n").strip()
@@ -90,13 +103,6 @@ def customer_update():
                 break
         except Exception as e:
             print(repr(e))
-def information_check(information:str,existing_customer:list):
-    for list_customer in existing_customer:
-        if information in list_customer:
-            print("information existed")
-            return True
-    print("Information not existed")
-    return False
 def information_update(old_information:str,new_information:str,existing_customer:list):
     for list_customer in existing_customer:
         if old_information in list_customer:
@@ -128,11 +134,15 @@ def CID_Check(CID,Full_CID,existing_customer)->bool:
 def NAME_workflow():
     while(True):
         try:
-            NAME=input("Input any name"+"\n").strip()
-            if NAME_Check(NAME):
-                return NAME
-            else:
+            FIRST_NAME=input("Input your first name"+"\n").strip()
+            LAST_NAME=input("Input your last name"+"\n").strip()
+            if not NAME_Check(FIRST_NAME) or not NAME_Check(LAST_NAME):
                 continue
+            NAME=FIRST_NAME+" "+LAST_NAME
+            #Allow name duplicate
+            #if check_exist(customer_load(customer_init), NAME, "NAME"):
+                #continue
+            return NAME
         except Exception as e:
             print(repr(e))
 
@@ -146,10 +156,11 @@ def PhoneNumber_workflow():
     while(True):
         try:
             PhoneNumber=input("Input phone number(10 lens number)"+"\n").strip()
-            if PhoneNumber_Check(PhoneNumber):
-                return PhoneNumber
-            else:
+            if not PhoneNumber_Check(PhoneNumber):
                 continue
+            if check_exist(customer_load(customer_init), PhoneNumber, "PHONE"):
+                continue
+            return PhoneNumber
         except Exception as e:
             print(repr(e))
 
@@ -167,16 +178,40 @@ def email_workflow():
         try:
             email_prefix = input("Input email prefix(Only the string ahead of @xx.com)"+"\n").strip()
             email_provider = input("Input email provider(Only the string between @ and .com)"+"\n").strip()
-            email_merge = email_prefix.strip()+"@"+email_provider.strip()+".com"
+            if email_prefix == "" or email_provider == "":
+                print("Email prefix or provider cannot be empty!")
+                continue
+            elif "@" in email_provider or ".com" in email_provider:
+                print("Email provider should not contain '@' or '.com'!")
+                continue
+            email_merge = email_prefix+"@"+email_provider+".com"
+            if check_exist(customer_load(customer_init), email_merge, "EMAIL"):
+                continue
             return email_merge
         except Exception as e:
             print(repr(e))
 
 def check_exist(list,input_data,duplicated_name:str)->bool:
-    for one_d in list:
-        if one_d[0] == input_data:
-            print(duplicated_name+" is existed!")
-            return True
+    if duplicated_name == "ID":
+        for one_d in list:
+            if one_d[0] == input_data:
+                print(duplicated_name+" is existed!")
+                return True
+    elif duplicated_name == "NAME":
+        for one_d in list:
+            if one_d[1] == input_data:
+                print(duplicated_name+" is existed!")
+                return True
+    elif duplicated_name == "PHONE":
+        for one_d in list:
+            if one_d[2] == input_data:
+                print(duplicated_name+" is existed!")
+                return True
+    elif duplicated_name == "EMAIL":
+        for one_d in list:
+            if one_d[3] == input_data:
+                print(duplicated_name+" is existed!")
+                return True
     return False
 
 def append_file(new_customer_data:list,customer_path:str):
@@ -187,7 +222,7 @@ def append_file(new_customer_data:list,customer_path:str):
 def rewrite_file(customer_data:list,customer_path:str):
     with open(customer_path,"w") as readed_file:
         for list in customer_data:
-            print(list)
+            #print(list)
             readed_file.write(",".join(list)+"\n")
 
 def customer_menu():
@@ -210,9 +245,21 @@ def customer_menu():
 
 
 #debug↓
-if __name__ == "__main__":
+#if __name__ == "__main__":
     #testlist = customer_load(customer_init)
     #rewrite_file(testlist,customer_init)
     #customer_add()
-    customer_update()
+    #customer_update()
 
+
+'''OVERLAP FUNCTION
+
+def information_check(information:str,existing_customer:list,column:str)->bool:
+    for list_customer in existing_customer:
+        if information in list_customer:
+            print("information existed")
+            return True
+    print("Information not existed")
+    return False
+
+'''
