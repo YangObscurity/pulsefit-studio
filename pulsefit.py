@@ -1,6 +1,6 @@
 import admin
 import bookingofficer
-import customer_manager
+import customer_manage
 import accountant
 
 
@@ -21,7 +21,7 @@ def main_menu():
         elif option == "2":
             bookingofficer.booking_menu()
         elif option == "3":
-            customer_manager.customer_menu()
+            customer_manage.customer_menu()
         elif option == "4":
             accountant.accountant_menu()
         elif option == "5":
