@@ -21,12 +21,12 @@ def main_menu():
       elif choice == "3":
         customer_manage.customer_menu()
       elif choice == "4":
-         accountant.accountant_menu()
+        accountant.accountant_menu()
       elif choice == "5":
-         print("Goodbye!")
-         break
+        print("Goodbye!")
+        break
       else:
-         print("\nInvalid option, please try again.\n")
+        print("\nInvalid option, please try again.\n")
          
 if __name__ == "__main__":
     while(True):
