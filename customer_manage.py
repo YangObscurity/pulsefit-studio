@@ -225,12 +225,47 @@ def rewrite_file(customer_data:list,customer_path:str):
             #print(list)
             readed_file.write(",".join(list)+"\n")
 
+def customer_delete():
+    existing_customer = customer_load(customer_init)
+
+    if not existing_customer:
+        print("No customer records found.")
+        return
+
+    target_id = input("Input the Customer ID to delete\n").strip()
+
+    target_index = None
+    for i in range(len(existing_customer)):
+        if existing_customer[i][0] == target_id:
+            target_index = i
+            break
+
+    if target_index is None:
+        print("Customer ID not found.")
+        return
+
+    row = existing_customer[target_index]
+    print("Customer found:")
+    print(f"ID: {row[0]}")
+    print(f"Name: {row[1]}")
+    print(f"Phone: {row[2]}")
+    print(f"Email: {row[3]}")
+
+    confirm = input("Confirm delete? (y\\n)\n").strip()
+    if confirm == "y" or confirm == "Y":
+        existing_customer.pop(target_index)
+        rewrite_file(existing_customer, customer_init)
+        print("Customer deleted successfully.")
+    else:
+        print("Deletion cancelled.")
+
 def customer_menu():
     while(True):
         print("===== CUSTOMER MANAGEMENT =====")
         print("1. Add Customer")
         print("2. Update Customer")
-        print("3. Back to Main Menu")
+        print("3. Delete Customer")
+        print("4. Back to Main Menu")
 
         choice = input("Select your option: ")
 
@@ -239,6 +274,8 @@ def customer_menu():
         elif choice == "2":
             customer_update()
         elif choice == "3":
+            customer_delete()
+        elif choice == "4":
             break
         else:
             print("\nInvalid option, please try again.\n")
