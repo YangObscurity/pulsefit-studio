@@ -1,4 +1,10 @@
 """
+# Comma-separated, one record per line - CSV convention (Shafranovich, 2005)
+# File modes and the with statement - Python docs (Python Software Foundation, 2024b)
+# str methods isalpha()/isdecimal()/strip() and list pop() - Python docs (Python Software Foundation, 2024a)
+# Named constants instead of repeating literals (Gaddis, 2018)
+# Splitting a program into small single-purpose functions (Downey, 2015)
+
 Customer Manage Python Part↓
 """
 CID_INIT="M26"
