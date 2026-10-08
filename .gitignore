@@ -1,5 +1,6 @@
 #Local datafile
 members.txt
 members_test.txt
+payments.txt
 #Cache
 __pycache__/

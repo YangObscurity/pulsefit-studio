@@ -1,6 +1,6 @@
 import admin
 import customer_manage
-import imgonnadie
+import bookingofficer
 import accountant
 
 def main_menu():
@@ -17,7 +17,7 @@ def main_menu():
       if choice == "1":
         admin.admin_menu()
       elif choice == "2":
-        imgonnadie.booking_menu()
+        bookingofficer.booking_menu()
       elif choice == "3":
         customer_manage.customer_menu()
       elif choice == "4":
